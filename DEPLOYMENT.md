@@ -13,23 +13,27 @@ The HubSpot project has been successfully created and deployed:
 ## 📋 What's Been Completed
 
 ### 1. ✅ Project Structure Created
+
 - Platform version: 2025.2
 - Distribution: Marketplace (OAuth)
 - Features: App, Workflow Action, Settings Page
 
 ### 2. ✅ App Configuration (`app-hsmeta.json`)
+
 - OAuth redirect URL: `https://oauth.kinghenry.au/oauth/callback/custom_api_workflow`
-- Required scopes: `automation`, `oauth` (auto-added)
+- Required scopes: `oauth`
 - Optional scopes: CRM object read/write permissions
 - Support email: support@kinghenry.au
 
 ### 3. ✅ Workflow Action Configured (`workflow-actions-hsmeta.json`)
+
 - Action URL: `https://oauth.kinghenry.au/api/workflow-action/execute`
 - 12 input fields with conditional field dependencies
 - 4 output fields (status_code, response_body, success, error_message)
 - Supports all object types (empty objectTypes array)
 
 **Input Fields:**
+
 - `step_name` (text, required) — custom label shown on workflow card
 - `api_url` (text, required)
 - `http_method` (select: GET/POST/PUT/PATCH/DELETE, required)
@@ -45,6 +49,7 @@ The HubSpot project has been successfully created and deployed:
 - `timeout_seconds` (number, optional)
 
 ### 4. ✅ Server Endpoint Created
+
 Added to `/Users/marcelrees/Projects/hubspot/hubspot-oauth-handler/server.js`:
 
 - Endpoint: `POST /api/workflow-action/execute`
@@ -59,6 +64,7 @@ Added to `/Users/marcelrees/Projects/hubspot/hubspot-oauth-handler/server.js`:
   - Response truncation for large payloads (100KB limit)
 
 ### 5. ✅ Settings Page Created
+
 - Professional UI with feature descriptions
 - Security best practices section
 - Example use cases
@@ -134,9 +140,11 @@ git push origin main
 ## 🧪 Testing the Workflow Action
 
 ### Test 1: Simple GET Request (No Auth)
+
 Use httpbin.org to test basic functionality:
 
 **Create a test workflow:**
+
 1. Go to **Automation** → **Workflows**
 2. Create a new workflow (Contact-based)
 3. Add the **"Custom API Call"** action
@@ -148,7 +156,9 @@ Use httpbin.org to test basic functionality:
 6. Check output fields for successful response
 
 ### Test 2: POST with Bearer Token
+
 **Configuration:**
+
 - API URL: `https://httpbin.org/bearer`
 - HTTP Method: `GET`
 - Auth Type: `Bearer Token`
@@ -157,7 +167,9 @@ Use httpbin.org to test basic functionality:
 Expected: `status_code = 200`, `success = true`
 
 ### Test 3: Query Parameters
+
 **Configuration:**
+
 - API URL: `https://httpbin.org/get`
 - HTTP Method: `GET`
 - Auth Type: `None`
@@ -166,7 +178,9 @@ Expected: `status_code = 200`, `success = true`
 Expected: Response body contains query parameters
 
 ### Test 4: POST with JSON Body
+
 **Configuration:**
+
 - API URL: `https://httpbin.org/post`
 - HTTP Method: `POST`
 - Auth Type: `None`
@@ -175,7 +189,9 @@ Expected: Response body contains query parameters
 Expected: `status_code = 200`, response contains posted data
 
 ### Test 5: Basic Authentication
+
 **Configuration:**
+
 - API URL: `https://httpbin.org/basic-auth/user/pass`
 - HTTP Method: `GET`
 - Auth Type: `Basic Auth`
@@ -185,7 +201,9 @@ Expected: `status_code = 200`, response contains posted data
 Expected: `status_code = 200`, `success = true`
 
 ### Test 6: API Key
+
 **Configuration:**
+
 - API URL: `https://httpbin.org/headers`
 - HTTP Method: `GET`
 - Auth Type: `API Key`
@@ -195,7 +213,9 @@ Expected: `status_code = 200`, `success = true`
 Expected: Response contains custom header
 
 ### Test 7: Error Handling
+
 **Configuration:**
+
 - API URL: `https://httpbin.org/status/404`
 - HTTP Method: `GET`
 - Auth Type: `None`
@@ -205,6 +225,7 @@ Expected: `status_code = 404`, `success = false`, `error_message` populated
 ## 📊 Monitoring and Debugging
 
 ### Check Server Logs
+
 Monitor the oauth.kinghenry.au server logs for workflow action executions:
 
 ```bash
@@ -214,6 +235,7 @@ pm2 logs oauth-handler
 ```
 
 ### Check HubSpot Workflow Logs
+
 1. Go to the workflow with the Custom API Call action
 2. Click on an enrolled record
 3. View the action execution history
@@ -222,18 +244,22 @@ pm2 logs oauth-handler
 ### Common Issues
 
 **Issue: "No apps found" or OAuth fails**
+
 - Solution: Verify `HUBSPOT_APPS` environment variable is properly formatted JSON
 - Ensure the app is deployed in DigitalOcean
 
 **Issue: "Invalid URL format"**
+
 - Solution: URL must start with `https://` (HTTPS required)
 - Localhost and private IPs are blocked for security
 
 **Issue: Timeout errors**
+
 - Solution: Increase timeout_seconds (max 60)
 - Check if the target API is responsive
 
 **Issue: Conditional fields not showing**
+
 - Solution: Field dependencies are configured; select the appropriate auth_type value
 
 ## 🔒 Security Features Implemented
@@ -262,6 +288,7 @@ Before using in production workflows:
 ## 📞 Support
 
 For issues or questions:
+
 - **Email:** support@kinghenry.au
 - **GitHub:** https://github.com/marcelrees/custom-api-workflow-action
 - **HubSpot Portal:** king-henry-developer-account (49012930)

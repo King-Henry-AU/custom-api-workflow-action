@@ -30,7 +30,7 @@ These URLs must be live before creating the app listing. HubSpot will crawl them
 
 - [x] **Terms of Service live** at `https://kinghenry.au/terms-of-service` — returns 200
 
-- [x] **App page live** at `https://kinghenry.au/apps/custom-api-workflow-action` *(see §3)*
+- [x] **App page live** at `https://kinghenry.au/apps/custom-api-workflow-action` _(see §3)_
 
 ---
 
@@ -88,6 +88,7 @@ HubSpot requires **3 active, unique installs from accounts not affiliated with y
 Done entirely through the HubSpot UI at: Developer Account → App Listings → Create listing
 
 ### 7a. Listing Info tab
+
 - [ ] Public app name: `Custom API Workflow Action`
 - [ ] Company name: `King Henry`
 - [ ] Tagline: ready in `content/app-listing-copy.md` → "Tagline" section
@@ -98,6 +99,7 @@ Done entirely through the HubSpot UI at: Developer Account → App Listings → 
 - [ ] URL path and search terms
 
 ### 7b. App Details tab
+
 - [ ] **Demo video**: create a short screen recording (~2–3 min) showing:
   - Installing the app via OAuth
   - Adding the "Custom API Call" action to a workflow
@@ -114,22 +116,25 @@ Done entirely through the HubSpot UI at: Developer Account → App Listings → 
 - [ ] **Shared data**: document how data flows
   - The app reads workflow enrollment data (contact/company/deal properties) and sends them to external APIs
   - No HubSpot objects are written to by this app
-  - Scopes: `automation` (read workflows)
+  - Scopes: `oauth`
 - [ ] **HubSpot features your app works with**: select "Workflows"
 - [ ] **Languages**: English
 
 ### 7c. Pricing tab
+
 - [ ] Set currency
 - [ ] Add pricing plan(s) — must match what's on kinghenry.au pricing page
   - If free: use "Free" model (only for free-forever or freemium)
   - Link to `https://kinghenry.au/pricing` (or equivalent)
 
 ### 7d. App Features tab
+
 - [ ] Add feature: "Custom API Call Workflow Action"
   - Description ready in `content/app-listing-copy.md` → "Feature description" section
   - Add a screenshot
 
 ### 7e. Support Info tab
+
 - [ ] Support email: `support@kinghenry.au` ✅ (already in hsmeta)
 - [ ] Languages: English
 - [ ] Company website: `https://kinghenry.au`
@@ -138,6 +143,7 @@ Done entirely through the HubSpot UI at: Developer Account → App Listings → 
 - [ ] Privacy Policy URL: `https://kinghenry.au/privacy-policy`
 
 ### 7f. Testing Info tab
+
 - [ ] **App review instructions** — copy ready in `content/app-listing-copy.md` → "App review instructions" section
 - [ ] **Technology Partner Program contacts**: add at least one contact (Main point of contact required)
   - Add: Developer contact, Marketing contact
@@ -165,22 +171,22 @@ Done entirely through the HubSpot UI at: Developer Account → App Listings → 
 
 ## Quick Reference
 
-| Item | Status | Location |
-|------|--------|----------|
-| Build #3 deployed | ✅ Done | HubSpot portal 49012930 |
-| `distribution: marketplace` | ✅ Done | `src/app/app-hsmeta.json` |
-| OAuth configured | ✅ Done | app-hsmeta.json |
-| App icon file | ✅ Committed, build #10 | `App-Icon-Workflow-API-Call.png` |
-| SettingsPage.tsx committed | ✅ Done | build #10 |
-| Build #10 deployed | ✅ Done | HubSpot portal 49012930 |
-| OAuth credentials in DigitalOcean | ✅ Confirmed | DigitalOcean → HUBSPOT_APPS env var |
-| Privacy Policy page | ✅ Live | `kinghenry.au/privacy-policy` |
-| Terms of Service page | ✅ Live | `kinghenry.au/terms-of-service` |
-| App page (setup + support) | ✅ Live | `kinghenry.au/apps/custom-api-workflow-action` |
-| 3 active installs | ❌ Missing | HubSpot Developer Portal |
-| App listing created | ❌ Missing | HubSpot Developer Portal |
-| Demo video | ❌ Missing | For app listing |
-| Screenshots | ❌ Missing | For app listing |
+| Item                              | Status                  | Location                                       |
+| --------------------------------- | ----------------------- | ---------------------------------------------- |
+| Build #3 deployed                 | ✅ Done                 | HubSpot portal 49012930                        |
+| `distribution: marketplace`       | ✅ Done                 | `src/app/app-hsmeta.json`                      |
+| OAuth configured                  | ✅ Done                 | app-hsmeta.json                                |
+| App icon file                     | ✅ Committed, build #10 | `App-Icon-Workflow-API-Call.png`               |
+| SettingsPage.tsx committed        | ✅ Done                 | build #10                                      |
+| Build #10 deployed                | ✅ Done                 | HubSpot portal 49012930                        |
+| OAuth credentials in DigitalOcean | ✅ Confirmed            | DigitalOcean → HUBSPOT_APPS env var            |
+| Privacy Policy page               | ✅ Live                 | `kinghenry.au/privacy-policy`                  |
+| Terms of Service page             | ✅ Live                 | `kinghenry.au/terms-of-service`                |
+| App page (setup + support)        | ✅ Live                 | `kinghenry.au/apps/custom-api-workflow-action` |
+| 3 active installs                 | ❌ Missing              | HubSpot Developer Portal                       |
+| App listing created               | ❌ Missing              | HubSpot Developer Portal                       |
+| Demo video                        | ❌ Missing              | For app listing                                |
+| Screenshots                       | ❌ Missing              | For app listing                                |
 
 ---
 
