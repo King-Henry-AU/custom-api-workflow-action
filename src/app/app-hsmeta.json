@@ -11,7 +11,7 @@
       "redirectUrls": [
         "https://hub.kinghenry.au/oauth/callback/custom_api_workflow"
       ],
-      "requiredScopes": ["automation", "oauth"],
+      "requiredScopes": ["oauth"],
       "optionalScopes": [],
       "conditionallyRequiredScopes": []
     },
