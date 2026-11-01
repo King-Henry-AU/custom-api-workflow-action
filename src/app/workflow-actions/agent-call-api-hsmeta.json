@@ -1,0 +1,150 @@
+{
+  "uid": "CustomAPIAgentCallApi",
+  "type": "workflow-action",
+  "config": {
+    "actionUrl": "https://hub.kinghenry.au/api/apps/custom-api-workflow/agent/call",
+    "isPublished": false,
+    "supportedClients": [
+      {
+        "client": "AGENTS",
+        "toolType": "TAKE_ACTION",
+        "llmConfig": {
+          "actionDescription": "Use this tool to send an HTTP request to an external API that an admin has connected, for example to look up an order, create a ticket in another system or send data to a webhook. Always call the List external API connections tool first and pick a connection from its results; never guess a connection name. Inputs: `connection` (required) is the exact `name` of a listed connection. `http_method` is GET, POST, PUT, PATCH or DELETE (default GET) and must be one of that connection's `allowed_methods`. `path` is the path to append to the connection's `base_url`, such as /v1/customers/123; do not include the host, and never put credentials, API keys or tokens anywhere, because authentication is added automatically. `query_parameters` is an optional JSON object of URL query parameters, e.g. {\"limit\": 10}. `request_body` is an optional JSON value sent as the body for POST, PUT and PATCH. `custom_headers` is an optional JSON object of extra headers; do not set Authorization. Outputs: `status_code`, `success` (\"true\" for 2xx responses), `response_body` (the raw response, truncated at about 20KB) and `error_message`. If `success` is \"false\", explain the error to the user rather than retrying with different credentials or hosts. Only call the API the user's request needs, and do not send CRM data to an API unless the user asked for that."
+        }
+      }
+    ],
+    "inputFields": [
+      {
+        "typeDefinition": {
+          "name": "connection",
+          "type": "string",
+          "fieldType": "text"
+        },
+        "supportedValueTypes": ["STATIC_VALUE"],
+        "isRequired": false
+      },
+      {
+        "typeDefinition": {
+          "name": "http_method",
+          "type": "enumeration",
+          "fieldType": "select",
+          "options": [
+            { "value": "GET", "label": "GET" },
+            { "value": "POST", "label": "POST" },
+            { "value": "PUT", "label": "PUT" },
+            { "value": "PATCH", "label": "PATCH" },
+            { "value": "DELETE", "label": "DELETE" }
+          ]
+        },
+        "supportedValueTypes": ["STATIC_VALUE"],
+        "isRequired": false
+      },
+      {
+        "typeDefinition": {
+          "name": "path",
+          "type": "string",
+          "fieldType": "text"
+        },
+        "supportedValueTypes": ["STATIC_VALUE"],
+        "isRequired": false
+      },
+      {
+        "typeDefinition": {
+          "name": "query_parameters",
+          "type": "string",
+          "fieldType": "textarea"
+        },
+        "supportedValueTypes": ["STATIC_VALUE"],
+        "isRequired": false
+      },
+      {
+        "typeDefinition": {
+          "name": "request_body",
+          "type": "string",
+          "fieldType": "textarea"
+        },
+        "supportedValueTypes": ["STATIC_VALUE"],
+        "isRequired": false
+      },
+      {
+        "typeDefinition": {
+          "name": "custom_headers",
+          "type": "string",
+          "fieldType": "textarea"
+        },
+        "supportedValueTypes": ["STATIC_VALUE"],
+        "isRequired": false
+      }
+    ],
+    "outputFields": [
+      {
+        "typeDefinition": {
+          "name": "status_code",
+          "type": "string",
+          "fieldType": "text"
+        }
+      },
+      {
+        "typeDefinition": {
+          "name": "success",
+          "type": "string",
+          "fieldType": "text"
+        }
+      },
+      {
+        "typeDefinition": {
+          "name": "response_body",
+          "type": "string",
+          "fieldType": "textarea"
+        }
+      },
+      {
+        "typeDefinition": {
+          "name": "error_message",
+          "type": "string",
+          "fieldType": "textarea"
+        }
+      }
+    ],
+    "labels": {
+      "en": {
+        "appDisplayName": "Custom API Call",
+        "actionName": "Call external API",
+        "actionDescription": "Sends an HTTP request through a saved API connection. The connection's credentials are added by the server and are never visible to the agent.",
+        "actionCardContent": "{{http_method}} {{path}} via {{connection}}",
+        "inputFieldLabels": {
+          "connection": "Connection",
+          "http_method": "HTTP Method",
+          "path": "Path",
+          "query_parameters": "Query Parameters (JSON)",
+          "request_body": "Request Body (JSON)",
+          "custom_headers": "Custom Headers (JSON)"
+        },
+        "inputFieldDescriptions": {
+          "connection": "Name of a saved connection that is enabled for AI agents",
+          "http_method": "HTTP method to use",
+          "path": "Path added to the connection's base URL, e.g. /v1/customers/123",
+          "query_parameters": "URL query parameters as a JSON object",
+          "request_body": "JSON body for POST, PUT and PATCH requests",
+          "custom_headers": "Extra HTTP headers as a JSON object"
+        },
+        "inputFieldOptionLabels": {
+          "http_method": {
+            "GET": "GET",
+            "POST": "POST",
+            "PUT": "PUT",
+            "PATCH": "PATCH",
+            "DELETE": "DELETE"
+          }
+        },
+        "outputFieldLabels": {
+          "status_code": "Status Code",
+          "success": "Success",
+          "response_body": "Response Body",
+          "error_message": "Error Message"
+        }
+      }
+    },
+    "objectTypes": []
+  }
+}

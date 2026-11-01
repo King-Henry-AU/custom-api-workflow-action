@@ -7,52 +7,60 @@ IMPORTANT: IF THE 'HubSpotDev' MCP SERVER IS INSTALLED USE THE TOOLS BEFORE TRYI
 ## Project Context
 
 ### What this project is
-A HubSpot marketplace app that adds a **"Custom API Call"** workflow action. When a workflow runs, it POSTs to `https://oauth.kinghenry.au/api/workflow-action/execute`, which proxies the HTTP request to the user-configured target API.
+A HubSpot marketplace app that adds a **"Custom API Call"** workflow action, plus two **agent tools** (beta) for HubSpot AI agents. All three POST to the backend at `https://hub.kinghenry.au`, which proxies the HTTP request to the target API.
 
 ```
-HubSpot Workflow → oauth.kinghenry.au/api/workflow-action/execute → User's target API
+HubSpot Workflow → hub.kinghenry.au/api/apps/custom-api-workflow/execute → Target API
+HubSpot Agent    → hub.kinghenry.au/api/apps/custom-api-workflow/agent/* → Target API
 ```
 
 ### Current deployment state
-- **Build:** #3 (deployed and live)
 - **Distribution:** `marketplace` (set in `src/app/app-hsmeta.json`)
 - **Portal:** king-henry-developer-account (49012930)
-- **OAuth callback:** `https://oauth.kinghenry.au/oauth/callback/custom_api_workflow`
-- **Action endpoint:** `https://oauth.kinghenry.au/api/workflow-action/execute`
+- **OAuth callback:** `https://hub.kinghenry.au/oauth/callback/custom_api_workflow`
+- **Backend:** `King-Henry-AU/hubspot-app-platform` (Coolify, `hub.kinghenry.au`), module `src/apps/custom-api-workflow/`
 
 ### Key files
 | File | Purpose |
 |------|---------|
 | `hsproject.json` | Project name, srcDir (`src`), platformVersion (`2025.2`) |
 | `src/app/app-hsmeta.json` | App config: OAuth, scopes, permittedUrls, distribution |
-| `src/app/workflow-actions/workflow-actions-hsmeta.json` | All input/output fields and conditional field dependencies |
-| `src/app/settings/SettingsPage.tsx` | Settings page UI (React, `@hubspot/ui-extensions`) |
+| `src/app/workflow-actions/workflow-actions-hsmeta.json` | Workflow action (uid `CustomAPIWorkflowAction_v2`): inputs, outputs, field dependencies |
+| `src/app/workflow-actions/agent-list-connections-hsmeta.json` | Agent tool (GET_DATA): lists agent-enabled connections |
+| `src/app/workflow-actions/agent-call-api-hsmeta.json` | Agent tool (TAKE_ACTION): calls an API through a connection |
+| `src/app/settings/SettingsPage.tsx` | Settings page: manage saved connections (React, `@hubspot/ui-extensions`) |
 | `src/app/settings/settings-page-hsmeta.json` | Settings component config (entrypoint) |
 | `src/app/settings/package.json` | Dependencies for settings component |
 
-### Workflow action input fields (13 total)
-- `step_name` (text, **required**) — custom display name shown on workflow card via `actionCardContent`
-- `api_url` (text, required) — target HTTPS endpoint
-- `http_method` (select, required) — GET/POST/PUT/PATCH/DELETE
-- `auth_type` (select, required) — none/bearer/api_key/basic
-- `bearer_token` (text, optional) — shown when auth_type=bearer
-- `api_key_header_name` + `api_key_value` (text, optional) — shown when auth_type=api_key
-- `basic_auth_username` + `basic_auth_password` (text, optional) — shown when auth_type=basic
-- `query_parameters`, `custom_headers`, `request_body` (textarea, optional) — JSON objects
-- `timeout_seconds` (number, optional) — max 60
+### Saved connections
+A connection is a base URL plus credentials, created on the settings page and stored encrypted in the backend (never sent back to HubSpot). The workflow action uses one when `auth_type` is `connection` (`connection_id` dropdown loads from `/options/connections`); `api_url` can then be just a path. Each connection has an `agent_access` setting (`none`, `read_only`, `read_write`) that controls whether agent tools can use it. Requests are locked to the connection's origin and base path.
+
+### Workflow action input fields
+- `step_name` (text, **required**): display name shown on the workflow card via `actionCardContent`
+- `api_url` (text, required): full HTTPS URL, or a path when using a saved connection
+- `http_method` (select, required): GET/POST/PUT/PATCH/DELETE
+- `auth_type` (select, required): connection/none/bearer/api_key/basic
+- `connection_id` (select via `optionsUrl`, optional): shown when auth_type=connection
+- `bearer_token` (text, optional): shown when auth_type=bearer (legacy, visible in the workflow)
+- `api_key_header_name` + `api_key_value` (text, optional): shown when auth_type=api_key (legacy)
+- `basic_auth_username` + `basic_auth_password` (text, optional): shown when auth_type=basic (legacy)
+- `query_parameters`, `custom_headers`, `request_body` (textarea, optional): JSON objects
+- `timeout_seconds` (number, optional): capped at 15 by the backend
+- `response_json_path` (text, optional): dot path to extract into `extracted_value`
 
 ### Output fields
-- `status_code` (number), `response_body` (string), `success` (bool), `error_message` (string)
+- `status_code` (number), `response_body` (string), `success` (bool), `error_message` (string), `extracted_value` (string)
+- Agent tools return all outputs as strings.
 
-### Backend server
-The HTTP proxying logic lives in a separate repo:
-- **Location:** `/Users/marcelrees/Projects/hubspot/hubspot-oauth-handler/server.js`
-- **Deployed at:** `https://oauth.kinghenry.au` (DigitalOcean App Platform)
+### Agent tools (beta)
+- Both have `isPublished: false` while in beta. Set to `true` when ready to ship to installed portals.
+- Don't make agent tool inputs required: required fields can't be changed or removed after upload.
+- The agent fills inputs itself, so agent tools must never take credentials as inputs.
 
 ### Important constraints
 - `distribution: marketplace` means `app-function` components are NOT allowed
 - All fetch URLs in settings/card components must be listed in `app-hsmeta.json` → `permittedUrls.fetch`
-- Currently permitted fetch URL: `https://oauth.kinghenry.au`
+- Currently permitted fetch URL: `https://hub.kinghenry.au`
 - Settings component cannot use `@hubspot/ui-extensions/crm` components
 - `style` props are NOT valid on `@hubspot/ui-extensions` components
 

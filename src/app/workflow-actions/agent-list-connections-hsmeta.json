@@ -1,0 +1,49 @@
+{
+  "uid": "CustomAPIAgentListConnections",
+  "type": "workflow-action",
+  "config": {
+    "actionUrl": "https://hub.kinghenry.au/api/apps/custom-api-workflow/agent/list-connections",
+    "isPublished": false,
+    "supportedClients": [
+      {
+        "client": "AGENTS",
+        "toolType": "GET_DATA",
+        "llmConfig": {
+          "actionDescription": "Use this tool first, before calling an external API, to find out which external APIs you are allowed to call. It takes no inputs. It returns `connections`, a JSON array where each item has `name` (pass this exactly as the `connection` input of the Call external API tool), `description` (what the API is for), `base_url` (paths you request are added to this) and `allowed_methods` (the HTTP methods you may use with it). If the array is empty, no APIs are available: tell the user an admin needs to enable a connection for AI agents in the Custom API Workflow Action settings, and do not try to call any API."
+        }
+      }
+    ],
+    "inputFields": [],
+    "outputFields": [
+      {
+        "typeDefinition": {
+          "name": "connections",
+          "type": "string",
+          "fieldType": "textarea"
+        }
+      },
+      {
+        "typeDefinition": {
+          "name": "error_message",
+          "type": "string",
+          "fieldType": "textarea"
+        }
+      }
+    ],
+    "labels": {
+      "en": {
+        "appDisplayName": "Custom API Call",
+        "actionName": "List external API connections",
+        "actionDescription": "Lists the saved API connections that AI agents are allowed to use. Credentials are never shown.",
+        "actionCardContent": "List external API connections",
+        "inputFieldLabels": {},
+        "inputFieldDescriptions": {},
+        "outputFieldLabels": {
+          "connections": "Connections",
+          "error_message": "Error Message"
+        }
+      }
+    },
+    "objectTypes": []
+  }
+}

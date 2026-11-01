@@ -50,6 +50,7 @@
           "type": "enumeration",
           "fieldType": "select",
           "options": [
+            { "value": "connection", "label": "Saved connection (recommended)" },
             { "value": "none", "label": "None" },
             { "value": "bearer", "label": "Bearer Token" },
             { "value": "api_key", "label": "API Key" },
@@ -58,6 +59,16 @@
         },
         "supportedValueTypes": ["STATIC_VALUE"],
         "isRequired": true
+      },
+      {
+        "typeDefinition": {
+          "name": "connection_id",
+          "type": "enumeration",
+          "fieldType": "select",
+          "optionsUrl": "https://hub.kinghenry.au/api/apps/custom-api-workflow/options/connections"
+        },
+        "supportedValueTypes": ["STATIC_VALUE"],
+        "isRequired": false
       },
       {
         "typeDefinition": {
@@ -154,6 +165,12 @@
       {
         "dependencyType": "CONDITIONAL_SINGLE_FIELD",
         "controllingFieldName": "auth_type",
+        "controllingFieldValue": "connection",
+        "targetFieldNames": ["connection_id"]
+      },
+      {
+        "dependencyType": "CONDITIONAL_SINGLE_FIELD",
+        "controllingFieldName": "auth_type",
         "controllingFieldValue": "bearer",
         "targetFieldNames": ["bearer_token"]
       },
@@ -214,9 +231,10 @@
         "actionCardContent": "{{step_name}}",
         "inputFieldLabels": {
           "step_name": "Name this action",
-          "api_url": "API URL",
+          "api_url": "API URL or path",
           "http_method": "HTTP Method",
           "auth_type": "Authentication Type",
+          "connection_id": "Saved connection",
           "bearer_token": "Bearer Token",
           "api_key_header_name": "API Key Header Name",
           "api_key_value": "API Key Value",
@@ -230,18 +248,19 @@
         },
         "inputFieldDescriptions": {
           "step_name": "Give this action a descriptive name (e.g., 'Send to Slack', 'Update CRM', 'Notify Admin'). This will be displayed on the workflow card.",
-          "api_url": "The full URL of the API endpoint to call (must start with https://)",
+          "api_url": "The full https:// URL to call. With a saved connection you can enter just the path (e.g. /v1/customers), which is added to the connection's base URL.",
           "http_method": "The HTTP method to use for the request",
-          "auth_type": "How to authenticate with the API",
-          "bearer_token": "Your API bearer token (will be sent in Authorization header)",
+          "auth_type": "How to authenticate with the API. A saved connection keeps credentials encrypted outside the workflow. Set connections up in the app's settings page.",
+          "connection_id": "A connection set up in the app's settings page (Settings > Integrations > Connected apps > Custom API Workflow Action). Its base URL and credentials are used for this request.",
+          "bearer_token": "Your API bearer token (sent in the Authorization header). Anyone who can view this workflow can see it, so prefer a saved connection.",
           "api_key_header_name": "The header name for your API key (e.g., 'X-API-Key')",
-          "api_key_value": "Your API key value",
+          "api_key_value": "Your API key value. Anyone who can view this workflow can see it, so prefer a saved connection.",
           "basic_auth_username": "Username for basic authentication",
-          "basic_auth_password": "Password for basic authentication",
+          "basic_auth_password": "Password for basic authentication. Anyone who can view this workflow can see it, so prefer a saved connection.",
           "query_parameters": "URL query parameters as JSON object. Example: {\"param1\": \"value1\", \"param2\": \"value2\"}",
           "custom_headers": "Additional HTTP headers as JSON object. Example: {\"Content-Type\": \"application/json\"}",
           "request_body": "JSON body for POST/PUT/PATCH requests. Example: {\"key\": \"value\"}",
-          "timeout_seconds": "Request timeout in seconds (default: 30, max: 60)",
+          "timeout_seconds": "Request timeout in seconds (default and maximum: 15)",
           "response_json_path": "Dot-notation path to extract from the JSON response. Example: data.score or result.items.0.name"
         },
         "outputFieldLabels": {

@@ -2,6 +2,24 @@
 
 All notable changes to the Custom API Workflow Action project.
 
+## [Unreleased] - Saved connections and agent tools
+
+Needs the matching `hubspot-app-platform` backend deployed first.
+
+### Added
+- **Saved connections** on the settings page: a base URL plus credentials (bearer, API key header or Basic auth), encrypted on the backend and never shown again after saving.
+- **"Saved connection (recommended)"** option for Authentication Type in the workflow action, with a connection dropdown. With a connection, API URL can be just a path such as `/v1/customers`.
+- **Agent tools (beta)**: "List external API connections" (GET_DATA) and "Call external API" (TAKE_ACTION). Agents can only use connections an admin has enabled for agents (read only or read and write), only under the connection's base URL, and never see credentials. Both tools ship with `isPublished: false`.
+
+### Changed
+- Inline credential fields now warn that anyone who can view the workflow can see them.
+- Timeout description corrected to the real 15 second cap.
+- Settings page support link points to the public app page instead of the GitHub repo.
+
+### Security (backend)
+- Connection credentials are locked to the connection's host: other hosts, other base paths and cross-host redirects are refused.
+- Outbound requests refuse hostnames that resolve to private IP ranges, and redirects to HTTP or private hosts.
+
 ## [Build #3] - 2026-01-25
 
 ### Added
