@@ -8,7 +8,10 @@ A HubSpot workflow action that enables sending HTTP API calls/webhooks directly 
 ## 🚀 Features
 
 - **Multiple HTTP Methods**: GET, POST, PUT, PATCH, DELETE
+- **Saved connections**: store an API's base URL and credentials once, encrypted on the backend, and reuse them across workflows without exposing the secret
+- **AI agent tools (beta)**: let HubSpot AI agents call APIs through connections an admin has enabled
 - **Authentication Support**:
+  - Saved connection (recommended)
   - None (public APIs)
   - Bearer Token
   - API Key (custom header)
@@ -30,7 +33,8 @@ A HubSpot workflow action that enables sending HTTP API calls/webhooks directly 
 This workflow action uses an external server approach to handle dynamic API calls:
 
 ```
-Workflow → HubSpot → oauth.kinghenry.au/api/workflow-action/execute → Target API
+Workflow → HubSpot → hub.kinghenry.au/api/apps/custom-api-workflow/execute → Target API
+Agent    → HubSpot → hub.kinghenry.au/api/apps/custom-api-workflow/agent/*  → Target API
 ```
 
 The workflow action sends configuration to our secure server endpoint, which makes the actual HTTP request to the user-specified API and returns the response.
@@ -131,10 +135,11 @@ If success = false → Send alert to admin
 ## 🔒 Security Features
 
 - **HTTPS Only**: Only HTTPS URLs are accepted
-- **SSRF Protection**: Blocks localhost and private IP addresses
-- **Timeout Limits**: Maximum 60-second request timeout
+- **SSRF Protection**: Blocks localhost, private IP addresses and hostnames that resolve to them, including on redirects
+- **Timeout Limits**: Maximum 15-second request timeout
 - **Response Size Limits**: 100KB maximum response size
-- **Secure Credentials**: All authentication credentials stored securely in HubSpot
+- **Saved connections**: Credentials are encrypted (AES-256-GCM) on the backend, never returned to HubSpot, and only sent to the connection's own host
+- **Inline credentials**: Credentials typed directly into a workflow action are stored in the workflow and visible to anyone who can view it
 - **Request Validation**: Comprehensive input validation
 
 ## 🧪 Testing
